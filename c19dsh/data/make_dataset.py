@@ -5,6 +5,8 @@ from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 
 
+from src.data.get_datasets import get_casos_confirmados
+
 @click.command()
 @click.argument('input_filepath', type=click.Path(exists=True))
 @click.argument('output_filepath', type=click.Path())
@@ -14,7 +16,12 @@ def main(input_filepath, output_filepath):
     """
     logger = logging.getLogger(__name__)
     logger.info('making final data set from raw data')
-
+    cc = get_casos_confirmados()
+    cc.columns = [ col.lower() for col in cc.columns ]
+    
+    
+    
+    cc.to_pickle(join(project,'data','processed','casos_confirmados.pkl'),compression='bz2')
 
 if __name__ == '__main__':
     log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
